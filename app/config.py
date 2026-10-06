@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     ai_agent_url: str = "http://localhost:8001"
     responder_secret_key: str = ""  # set via .env; empty means submission is disabled
     environment: str = "development"
+    api_key: str = ""  # set via .env; empty means API key auth is disabled
 
     class Config:
         env_file = ".env"
