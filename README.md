@@ -33,6 +33,20 @@ disabled but reading events and scoring still work.
 public. If `API_KEY` is empty, auth is disabled (handy for local
 development) — always set it in a real deployment.
 
+## Logging
+
+Every request is logged as one JSON line on the `sorowatch.access` logger,
+for example:
+
+```
+{"event": "request", "request_id": "3f2a...", "method": "GET", "path": "/health", "status": 200, "duration_ms": 1.4, "client": "127.0.0.1"}
+```
+
+Send an `X-Request-ID` header to reuse your own trace ID; otherwise one is
+generated. The ID is returned in the `X-Request-ID` response header.
+Headers, query strings and bodies are never logged, so secrets like the
+API key stay out of the logs.
+
 ## Run
 
 ```
