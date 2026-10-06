@@ -1,5 +1,6 @@
 from fastapi import Depends, FastAPI
 from app.routers import health, events, risk
+from app.logging_middleware import RequestLoggingMiddleware
 from app.security import require_api_key
 
 app = FastAPI(
@@ -7,6 +8,8 @@ app = FastAPI(
     description="Coordinates the AI scoring agent and the on-chain risk registry.",
     version="0.1.0",
 )
+
+app.add_middleware(RequestLoggingMiddleware)
 
 app.include_router(health.router)
 app.include_router(
