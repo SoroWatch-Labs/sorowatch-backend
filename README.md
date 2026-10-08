@@ -7,7 +7,9 @@ on-chain using the real Stellar Python SDK.
 
 ## Endpoints
 
-- `GET /health`
+- `GET /health` — liveness; always `{"status": "ok"}` while the process is up
+- `GET /health/ready` — readiness; checks the AI agent's `/health` (3 second
+  timeout) and returns `503` with `{"status": "degraded"}` if it is down
 - `GET /events?start_ledger=N` — reads real `flagged` events from Soroban
   RPC for the configured contract
 - `POST /risk/score` — calls sorowatch-ai-agent to score an address;
@@ -29,8 +31,8 @@ API_KEY=<shared secret clients must send in the X-API-Key header>
 disabled but reading events and scoring still work.
 
 `API_KEY` protects `/events` and `/risk/*`: requests must include an
-`X-API-Key` header with the same value or they get `401`. `/health` stays
-public. If `API_KEY` is empty, auth is disabled (handy for local
+`X-API-Key` header with the same value or they get `401`. `/health` and
+`/health/ready` stay public. If `API_KEY` is empty, auth is disabled (handy for local
 development) — always set it in a real deployment.
 
 ## Logging

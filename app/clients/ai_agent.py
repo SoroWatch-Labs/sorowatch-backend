@@ -15,3 +15,12 @@ class AiAgentClient:
             )
             response.raise_for_status()
             return response.json()
+
+    async def is_healthy(self) -> bool:
+        """True if the agent's /health answers 200; never raises."""
+        try:
+            async with httpx.AsyncClient(timeout=self.timeout) as client:
+                response = await client.get(f"{self.base_url}/health")
+            return response.status_code == 200
+        except httpx.HTTPError:
+            return False
