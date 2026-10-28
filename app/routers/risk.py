@@ -14,7 +14,28 @@ class ScoreRequest(BaseModel):
     submit_on_chain_if_flagged: bool = False
 
 
-@router.post("/score")
+@router.post(
+    "/score",
+    summary="Score an address with the AI agent",
+    responses={
+        200: {
+            "description": "Risk score from the sorowatch-ai-agent. On-chain submission is reflected under on_chain_submission (null when disabled).",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "address": "GABC1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ234567890ABCDEFG",
+                        "score": 75,
+                        "flagged": True,
+                        "on_chain_submission": {
+                            "status": "PENDING",
+                            "hash": "9f2c1a7b4e6d8c0a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef",
+                        },
+                    }
+                }
+            },
+        }
+    },
+)
 async def score_address(req: ScoreRequest):
     """
     Calls the ai-agent service to score an address. If

@@ -5,7 +5,32 @@ from app.clients.soroban_rpc import SorobanRpcClient
 router = APIRouter()
 
 
-@router.get("/")
+@router.get(
+    "/",
+    summary="List flagged events",
+    responses={
+        200: {
+            "description": "Flagged events read live from Soroban RPC. Empty list (not an error) when CONTRACT_ID is unset or there are no events yet.",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "events": [
+                            {
+                                "type": "contract",
+                                "contractId": "CABC1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ234567890ABCDEFG",
+                                "ledger": 123456,
+                                "ledgerClosedAt": "2026-01-01T00:00:00Z",
+                                "id": "0000000123-0000000001",
+                                "topic": ["flagged"],
+                                "value": "80",
+                            }
+                        ]
+                    }
+                }
+            },
+        }
+    },
+)
 async def list_events(start_ledger: int = Query(default=1, ge=1)):
     """
     Return 'flagged' events emitted by the sorowatch-contract, read live
